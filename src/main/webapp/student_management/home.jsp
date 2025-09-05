@@ -15,7 +15,7 @@
         }
     %>
 
-    <h2>Welcome, <%= user.getUsername()%> (User) </h2>
+    <h2>Welcome, <%= user.getUserAccount()%> (User) </h2>
     <a href="${pageContext.request.contextPath}/logout">Logout</a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

@@ -22,16 +22,27 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
+        String userAccount = req.getParameter("userAccount");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
+        String confirmPassword = req.getParameter("confirmPassword");
 
-        if (userDAO.userExists(username)) {
-            req.setAttribute("error", "Username đã tồn tại, vui lòng chọn tên khác!");
+        if (userDAO.userExists(userAccount)) {
+            req.setAttribute("error", "userAccount đã tồn tại, vui lòng chọn tên khác!");
+            req.getRequestDispatcher("/student_management/register.jsp").forward(req, resp);
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            req.setAttribute("error", "Mật khẩu và xác nhận mật khẩu không khớp!");
             req.getRequestDispatcher("/student_management/register.jsp").forward(req, resp);
             return;
         }
 
         User newUser = new User();
         newUser.setUsername(username);
+        newUser.setUserAccount(userAccount);
+        newUser.setEmail(email);
         newUser.setPassword(password);
 
         userDAO.registerUser(newUser);

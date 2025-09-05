@@ -13,8 +13,8 @@
 
         <form method="post" action="${pageContext.request.contextPath}/login">
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+                <label for="userAccount" class="form-label">User Account</label>
+                <input type="text" id="userAccount" name="userAccount" class="form-control" required>
             </div>
 
             <div class="mb-3">

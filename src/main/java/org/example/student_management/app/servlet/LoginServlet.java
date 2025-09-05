@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(name = "loginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -22,29 +23,33 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
+        String userAccount = req.getParameter("userAccount");
         String password = req.getParameter("password");
 
-        if (!userDAO.userExists(username)) {
+        if (!userDAO.userExists(userAccount)) {
             req.setAttribute("error", "Tài khoản chưa đăng ký!");
             req.getRequestDispatcher("/student_management/login.jsp").forward(req, resp);
             return;
         }
 
-        User user = userDAO.login(username, password);
+        try {
+            User user = userDAO.login(userAccount, password);
 
-        if (user != null) {
-            HttpSession session = req.getSession();
-            session.setAttribute("user", user);
+            if (user != null) {
+                HttpSession session = req.getSession();
+                session.setAttribute("user", user);
 
-            if ("admin".equals(user.getRole())) {
-                resp.sendRedirect("/student_management/admin.jsp");
+                if ("admin".equals(user.getRole())) {
+                    resp.sendRedirect("/student_management/admin.jsp");
+                } else {
+                    resp.sendRedirect("/student_management/home.jsp");
+                }
             } else {
-                resp.sendRedirect("/student_management/home.jsp");
+                req.setAttribute("error", "Invalid username or password");
+                req.getRequestDispatcher("/student_management/login.jsp").forward(req, resp);
             }
-        } else {
-            req.setAttribute("error", "Invalid username or password");
-            req.getRequestDispatcher("/student_management/login.jsp").forward(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
     }
 }

@@ -15,7 +15,7 @@
     }
 %>
 
-    <h2>Welcome, Admin, <%= user.getUsername() %></h2>
+    <h2>Welcome, Admin, <%= user.getUserAccount() %></h2>
     <a href="${pageContext.request.contextPath}/logout">Logout</a>
 
 
